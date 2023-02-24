@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog API</title>
+    <!-- CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Javascript -->
+    <script defer src="js/bootstrap.bundle.min.js"></script>
+    <script defer src="js/main.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-5 text-left">Blog</h1>
+        <!-- Listado de artículos -->
+        <div id="listado-articulos" class="row row-cols-3 row-cols-md-3 g-4"></div>
+        <!-- Marcador para paginador infinito. Un elemento que vamos a vigilar. Si es visible, aumentaremos la "paginaActual" -->
+        <div id="marcador" style="min-height: 1px; margin-top: 16rem;"></div>
+        <!-- Artículo individual -->
+        <div id="articulo-individual"></div>
+    </div>
+    <!-- Plantilla -->
+    <!-- | Card de cada artículo del listado | -->
+    <template id="previa-articulo">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 id="titulo" class="card-title"></h5>
+                    <p id="resumen" class="card-text"></p>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- | Loading |-->
+    <template id="loading">
+        <div class="d-flex justify-content-center align-items-center w-100" style="height: 50rem;">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </template>
+</body>
+</html>
