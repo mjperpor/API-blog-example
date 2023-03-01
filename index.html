@@ -14,6 +14,15 @@
 <body>
     <div class="container">
         <h1 class="my-5 text-left">Blog</h1>
+        <!-- Ficha de artículo -->
+        <article id="single-blog" class="d-none">
+            <h2 id="single-blog__title"></h2>
+            <div id="single-blog__content"></div>
+            <p>
+                <button class="btn btn-primary" id="boton-volver">Volver</button>
+            </p>
+            <div id="single-blog__comments"></div>
+        </article>
         <!-- Listado de artículos -->
         <div id="listado-articulos" class="row row-cols-3 row-cols-md-3 g-4"></div>
         <!-- Marcador para paginador infinito. Un elemento que vamos a vigilar. Si es visible, aumentaremos la "paginaActual" -->
@@ -29,17 +38,44 @@
                 <div class="card-body">
                     <h5 id="titulo" class="card-title"></h5>
                     <p id="resumen" class="card-text"></p>
+                    <p>
+                        <button id="boton-ver" class="btn btn-primary" data-id="">Ver</button>
+                    </p>
                 </div>
             </div>
         </div>
     </template>
-    <!-- | Loading |-->
-    <template id="loading">
-        <div class="d-flex justify-content-center align-items-center w-100" style="height: 50rem;">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
+    <!-- | Card de comentario | -->
+    <template id="comment-item">
+        <article class="col">
+            <div class="card border-warring h-100">
+                <div class="card-body">
+                    <h5 id="titulo" class="comment__title"></h5>
+                    <h6 id="comment__email"></h6>
+                    <p id="comment__body" class="card-text"></p>
+                </div>
             </div>
-        </div>
+        </article>
     </template>
+    <!-- | Loading |-->
+    <div id="loading" class="
+        position-fixed
+        top-0
+        start-0
+        end-0
+        bottom-0
+        d-flex 
+        justify-content-center 
+        align-items-center 
+        vw-100 
+        vh-100
+        d-none
+        "
+        style="backdrop-filter: blur(10px)"
+    >
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
 </body>
 </html>

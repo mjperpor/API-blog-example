@@ -1,16 +1,43 @@
 // Variables
+// - Listado
 const listadoArticulosDOM = document.querySelector("#listado-articulos");
-const templateLoading = document.querySelector("#loading").content.firstElementChild;
+const loadingDOM = document.querySelector("#loading");
 const templatePreviaArticulo = document.querySelector("#previa-articulo").content.firstElementChild;
 const marcadorDOM = document.querySelector("#marcador");
+// - Single
+const singleDOM = document.querySelector("#single-blog");
+const singleTitleDOM = document.querySelector("#single-blog__title");
+const singleContentDOM = document.querySelector("#single-blog__content");
+botonVolverDOM = document.querySelector("#boton-volver");
+// - Data
 let articulos = [];
+
+// - 2 estados: "listado articulos" y "single articulo"
+let estado = "listado articulos";
+// - Paginado
 let paginaActual = 1;
 const numeroArticulosPorPagina = 6;
-const urlAPI = "https://jsonplaceholder.typicode.com/";
 let observerCuadrado = null;
+// - Api
+const urlAPI = "https://jsonplaceholder.typicode.com/";
 
 // Funciones
 function renderizar() {
+    // Comprobar esado
+    switch(estado) {
+        case "listado articulos":
+            singleDOM.classList.add("d-none");
+            listadoArticulosDOM.classList.remove("d-none");
+            loadingDOM.classList.add("d-none");
+            break;
+        case "single articulo":
+            singleDOM.classList.remove("d-none");
+            listadoArticulosDOM.classList.add("d-none");
+            loadingDOM.classList.add("d-none");
+            break;
+        case "loading":
+            loadingDOM.classList.remove("d-none");
+    }
     // Borramos el contenido del listado
     listadoArticulosDOM.innerHTML = "";
     // Lista de articulos
@@ -22,14 +49,18 @@ function renderizar() {
         titulo.textContent = articulo.title;
         const resumen = miArticulo.querySelector("#resumen");
         resumen.textContent = articulo.body;
+        // Añadimos la id al boton de Ver
+        const botonVer = miArticulo.querySelector("#boton-ver");
+        botonVer.dataset.id = articulo.id;
+        botonVer.addEventListener("click", function() {
+            obtenerSingleArticulo(articulo.id);
+        });
         // Insertamos en el listado
         listadoArticulosDOM.appendChild(miArticulo);
     });
 }
 
 async function obtenerArticulos() {
-    // Mostramos una distracción visual al usuario
-    mostrarLoadingEnListadoArticulos();
     //Calcular los cortes
     const corteInicio = (paginaActual - 1) * numeroArticulosPorPagina;
     const corteFinal = corteInicio + numeroArticulosPorPagina;
@@ -46,19 +77,8 @@ async function obtenerArticulos() {
     }
     // Imprimo
     articulos = articulos.concat(json);
-    // Quitar loading
-    quitarLoadingEnListadoArticulos();
     // Redibujamos
     renderizar();
-}
-
-function mostrarLoadingEnListadoArticulos() {
-    const miLoading = templateLoading.cloneNode(true);
-    marcador.appendChild(miLoading);
-}
-
-function quitarLoadingEnListadoArticulos() {
-    marcador.innerHTML = "";
 }
 
 function avanzarPagina() {
@@ -82,7 +102,28 @@ function vigilanteDeMarcador() {
     observerCuadrado.observe(marcadorDOM);
 }
 
+function cambiarEstado(nuevoEstado) {
+    estado = nuevoEstado;
+    renderizar();
+}
+
+async function obtenerSingleArticulo(id) {
+    // Mostrar loading
+    cambiarEstado("loading");
+    const miFetch = await fetch(`${urlAPI}posts/${id}`);
+    // Transforma la respuesta. En este caso lo convierte a JSON
+    const json = await miFetch.json();
+    // Modificamos el HTML de single
+    singleTitleDOM.textContent = json.title;
+    singleContentDOM.textContent = json.body;
+    // Al terminar de cargar los datos, quita loading
+    cambiarEstado("single articulo");
+}
+
 // Eventos
+botonVolverDOM.addEventListener("click", function() {
+    cambiarEstado("listado articulos");
+});
 
 // Inicio
 obtenerArticulos();
